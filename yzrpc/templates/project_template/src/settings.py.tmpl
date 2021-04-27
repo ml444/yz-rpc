@@ -1,0 +1,77 @@
+#!/usr/bin/python3.7+
+# -*- coding:utf-8 -*-
+"""
+@auth:
+@date: 2020-9-13
+@desc: ...
+"""
+import os
+import logging
+from typing import List, Tuple, Union, Optional
+from pydantic import Field
+from yzrpc.config import DefaultSetting, get_configer
+
+
+# yaml格式解析器
+# conf = get_configer('yaml', import_path=os.path.dirname(__file__))
+
+# ini格式解析器
+conf = get_configer('ini', import_path=os.path.dirname(__file__))
+
+
+class Settings(DefaultSetting):
+    DEBUG: bool = False
+    START_ASYNC: bool = False
+    PROJECT_NAME: str = "{{ project_name }}"
+    SECRET_KEY: str = "{}"
+    src_path: str = os.path.abspath(os.path.dirname(__file__))  # 代码绝对路径
+
+    # postgres数据库的URI
+    DB_URI: str = Field(None, env="DB_URI")
+
+    # >>>>>>>>>>>>>>>>>>>>>>>>>> GRPC >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    # >>>>>>>>>>>>>>>>>>>>>>>>>> GRPC >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    # 地址
+    GRPC_SERVER_HOST: str = "[::]"
+    # 端口
+    GRPC_SERVER_PORT: int = 50051
+
+    # 最大线程数
+    GRPC_SERVER_MAX_WORKERS: int = 1
+
+    # 多进程支持，可以使用`multiprocessing.cpu_count()`
+    GRPC_SERVER_PROCESS_COUNT: int = 1
+
+    # RPC Server的中间件导入列表：['dotted.path.to.callable_interceptor', ...]
+    GRPC_SERVER_MIDDLEWARES: List = []
+
+    # 键值对的可选列表用于配置通道：[("grpc.max_receive_message_length", 1024*1024*100)]
+    GRPC_SERVER_OPTIONS: List[Tuple[str, Union[str, int, bool]]] = []
+
+    # 服务器的最大并发rpcs数
+    GRPC_SERVER_MAXIMUM_CONCURRENT_RPCS: Optional[int] = None
+
+    # 启动后是否阻塞
+    GRPC_SERVER_RUN_WITH_BLOCK: bool = True
+
+    # 健康检测
+    GRPC_HEALTH_CHECKING_ENABLE = True
+    GRPC_HEALTH_CHECKING_THREAD_POOL_NUM = 1
+
+    # Server Reflection
+    GRPC_SEVER_REFLECTION_ENABLE = False
+
+    # gRPC Service Third-Part Package Support
+    GRPC_THIRD_PART_PACKAGES: List[str] = []
+    # <<<<<<<<<<<<<<<<<<<<<<<<<<< GRPC <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+    # <<<<<<<<<<<<<<<<<<<<<<<<<<< GRPC <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+    # logger
+    LOGGER_LEVEL = logging.INFO
+    LOGGER_FORMATTER: str = "[PID %(process)d] %(message)s"
+
+
+settings = Settings()
+
+
+

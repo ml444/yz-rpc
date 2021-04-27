@@ -1,0 +1,8 @@
+grpcio>=1.35.0
+grpcio-tools>=1.35.0
+Jinja2>=2.11.3,<3
+pydantic>=1.8,<2
+
+
+# colorama>=0.3.4; sys_platform=="win32"
+# colorama>=0.3.4; platform_system=="Windows" and python_version=="2.7"

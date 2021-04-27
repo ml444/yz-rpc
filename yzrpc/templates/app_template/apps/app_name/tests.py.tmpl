@@ -1,0 +1,35 @@
+#!/usr/bin/python3.7+
+# -*- coding:utf-8 -*-
+import pytest
+from yzrpc.tests import *
+
+
+from src.services.{{ app_name }}_pb2 import SchemaExample
+
+
+@pytest.fixture(scope='module')
+def grpc_add_to_server():
+    from src.services.{{ app_name }}_pb2_grpc import add_{{ camel_case(app_name) }}Servicer_to_server
+    return add_{{ camel_case(app_name) }}Servicer_to_server
+
+
+@pytest.fixture(scope='module')
+def current_servicer():
+    from .views import {{ camel_case(app_name) }}Servicer
+    return {{ camel_case(app_name) }}Servicer
+
+
+@pytest.fixture(scope='module')
+def grpc_stub(grpc_channel):
+    from src.services.{{ app_name }}_pb2_grpc import {{ camel_case(app_name) }}Stub
+
+    return {{ camel_case(app_name) }}Stub(grpc_channel)
+
+
+def test_get_one(grpc_stub):
+    request = SchemaExample(int_exa=1, str_exa='test')
+    context = MockContext()
+    response = grpc_stub.get_one(request, context)
+    assert isinstance(response, SchemaExample)
+    assert response.int_exa == 1
+    assert response.str_exa == 'test'

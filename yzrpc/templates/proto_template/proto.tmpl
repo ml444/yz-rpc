@@ -1,0 +1,56 @@
+// Copyright 2015 gRPC authors.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+syntax = "proto3";
+
+package {{ package_name }};
+
+{% block import %}
+    {% for file_path in modules %}
+import "{{ file_path }}";
+    {% endfor %}
+{% endblock %}
+
+{% block service %}
+    {% for service in services %}
+service {{ service.name }} {
+        {% for m in service.methods %}
+    rpc {{ m.name }}({{ m.request_typ+' ' if m.request_typ else m.request_typ }}{{ m.request_cls.__name__ }}) returns ({{ m.response_typ+' ' if m.response_typ else m.response_typ }}{{ m.response_cls.__name__ }}) {}
+        {% endfor %}
+}
+    {% endfor %}
+{% endblock %}
+
+{% block message %}
+    {% for cls_name, fields in messages.items() %}
+message {{ cls_name }} {
+            {% for field, field_type in fields.items() %}
+            {% with loop2 = loop.index %}
+                {% if isinstance(field_type, set) %}
+    oneof {{ field }} {
+                {% for subfield, _type in field_type %}
+        {{ _type }} {{ subfield }} = {{loop2}}{{ loop.index }};
+                {% endfor %}
+    }
+
+                {% elif isinstance(field_type, list) %}
+    repeated {{ field_type[0] }} {{ field }} = {{ loop.index }};
+                {% else %}
+    {{ field_type }} {{ field }} = {{ loop.index }};
+                {% endif %}
+            {% endwith %}
+            {% endfor %}
+}
+    {% endfor %}
+{% endblock %}

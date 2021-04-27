@@ -1,0 +1,18 @@
+-i https://mirrors.aliyun.com/pypi/simple
+
+yzcore
+
+
+# #db模块需要的依赖包
+# alembic>=1.4.3
+# sqlalchemy>=1.3.19
+# psycopg2-binary>=2.8.6
+# pymongo>=3.11.0
+
+# #extensions模块需要的依赖包
+# oss2>=2.13.0
+# aiohttp>=3.6.2
+
+# #测试模块需要用到的依赖包
+# pytest==6.1.1
+# aioresponses==0.7.0

@@ -1,0 +1,3 @@
+include *.txt
+recursive-include yzrpc *.txt *.py *.tmpl *.ini *.yaml
+prune misc

@@ -1,0 +1,33 @@
+#!/usr/bin/python3.7+
+# -*- coding:utf-8 -*-
+"""
+@auth:
+@date:
+@desc:
+"""
+from typing import Iterable, Iterator
+from yzrpc.servicer import ServicerBase, GRPCMethod
+
+# from src.services import {{ app_name }}_pb2
+# from src.services import {{ app_name }}_pb2_grpc
+
+from .schemas import SchemaExample
+
+
+class {{ camel_case(app_name) }}Servicer(ServicerBase):
+    @GRPCMethod(before_requests=[], after_responses=[])
+    def get_one(self, request: SchemaExample, context) -> SchemaExample:
+        return request
+
+    @GRPCMethod()
+    def get_some(self, request: Iterator[SchemaExample], context) -> Iterable[SchemaExample]:
+        return request
+
+    @GRPCMethod()
+    def list_some(self, request: SchemaExample, context) -> Iterable[SchemaExample]:
+        pass
+
+    @GRPCMethod()
+    def update_some(self, request: Iterator[SchemaExample], context) -> SchemaExample:
+        pass
+
